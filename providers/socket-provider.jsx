@@ -22,7 +22,7 @@ export const SocketProvider = ({ children }) => {
 
     const accessToken = sessionStorage.getItem("accessToken");
     if (accessToken) {
-      return new ClientIO("http://localhost:3333", {
+      return new ClientIO(process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY, {
         extraHeaders: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",

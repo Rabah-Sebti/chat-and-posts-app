@@ -58,7 +58,7 @@ const Feed = () => {
 
   const { data, error, isLoading } = useSWR(
     [
-      "http://localhost:3333/api/v1/posts",
+      `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts`,
       {
         search: debouncedSearchText,
         page,
