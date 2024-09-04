@@ -1,8 +1,8 @@
 import axios from "axios";
 // config
 import { HOST_API_KEY } from "../config-global";
-import useRefreshToken from "@hooks/useRefreshToken";
-import { setSession } from "@auth/utils";
+// import useRefreshToken from "@hooks/useRefreshToken";
+// import { setSession } from "@auth/utils";
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +17,6 @@ axiosInstance.interceptors.response.use(
   //     (error.response && error.response.data) || "Something went wrong"
   //   )
   async (error) => {
-    const refresh = useRefreshToken();
     const prevRequest = error?.config;
     if (error?.response?.status === 401 && !prevRequest?.sent) {
       prevRequest.sent = true;

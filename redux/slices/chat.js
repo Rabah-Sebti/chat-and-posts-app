@@ -72,10 +72,7 @@ export function addMessage(data, setNewMessages, newMessages, socket) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(
-        `http://localhost:3333/api/v1/messages/add-message`,
-        data
-      );
+      const response = await axios.post(`/api/v1/messages/add-message`, data);
       const updatedMessages = [...newMessages, response.data];
       setNewMessages(updatedMessages);
       dispatch(slice.actions.addMessageSuccess(response.data.msg));
@@ -89,10 +86,7 @@ export function getMessages(setNewMessages, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(
-        `http://localhost:3333/api/v1/messages`,
-        data
-      );
+      const response = await axios.post(`/api/v1/messages`, data);
       setNewMessages((prev) => [...response.data.messages, ...prev]);
       dispatch(slice.actions.getMessagesSuccess(response.data));
     } catch (error) {
@@ -105,10 +99,7 @@ export function getUsers() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(
-        "http://localhost:3333/api/v1/users",
-        {}
-      );
+      const response = await axios.get("/api/v1/users", {});
       dispatch(slice.actions.getUsersSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -120,7 +111,7 @@ export function updateUnreadMessages(data, setUnreadMessages) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.patch(
-        `http://localhost:3333/api/v1/messages/update-messages`,
+        `/api/v1/messages/update-messages`,
         data
       );
       setUnreadMessages((prev) => prev - response.data.count);
@@ -134,9 +125,7 @@ export function getAllUnreadMessages(setUnreadMessages) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(
-        `http://localhost:3333/api/v1/messages/unread-messages`
-      );
+      const response = await axios.get(`/api/v1/messages/unread-messages`);
 
       setUnreadMessages(response.data.unread_messages);
       dispatch(slice.actions.getUnreadMessagesSuccess(response.data));

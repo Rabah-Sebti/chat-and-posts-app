@@ -51,12 +51,9 @@ export function editProfile(userInput) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.patch(
-        "http://localhost:3333/api/v1/users/edit",
-        {
-          ...userInput,
-        }
-      );
+      const response = await axios.patch("/api/v1/users/edit", {
+        ...userInput,
+      });
 
       dispatch(slice.actions.editProfileSuccess(response.data));
     } catch (error) {
@@ -69,7 +66,7 @@ export function editPassword(userInput) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.patch(
-        "http://localhost:3333/api/v1/users/client/update-password",
+        "/api/v1/users/client/update-password",
         {
           ...userInput,
         }

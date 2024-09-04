@@ -51,10 +51,7 @@ export function createComment(newComment, setComments) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(
-        "http://localhost:3333/api/v1/comments",
-        newComment
-      );
+      const response = await axios.post("/api/v1/comments", newComment);
       dispatch(slice.actions.createCommentSuccess(response.data));
       setComments((prev) => [...prev, response.data]);
     } catch (error) {
@@ -66,10 +63,7 @@ export function getComments(data, setComments, setTotalComments) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(
-        `http://localhost:3333/api/v1/comments/post`,
-        data
-      );
+      const response = await axios.post(`/api/v1/comments/post`, data);
       setComments((prev) => [...prev, ...response.data.comments]);
       setTotalComments(response.data.totalComments);
       dispatch(slice.actions.getCommentsSuccess(response.data.comments));
