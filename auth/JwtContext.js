@@ -93,9 +93,7 @@ export function AuthProvider({ children }) {
       if (accessToken) {
         setSession(accessToken);
 
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/users/me`
-        );
+        const response = await axios.get(`/api/v1/users/me`);
 
         if (response.status === 200) {
           const user = response.data;
@@ -135,13 +133,10 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = useCallback(async (email, password) => {
-    const response = await axios.post(
-      "http://localhost:3333/api/v1/auth/sign-in",
-      {
-        email,
-        password,
-      }
-    );
+    const response = await axios.post("/api/v1/auth/sign-in", {
+      email,
+      password,
+    });
     const { token, user } = response.data;
     const { access_token } = token;
     setSession(access_token);
@@ -158,7 +153,7 @@ export function AuthProvider({ children }) {
   // REGISTER
   const register = useCallback(async (data) => {
     const response = await axios.post(
-      "http://localhost:3333/api/v1/auth/sign-up",
+      "/api/v1/auth/sign-up",
       data
       // {
       //   withCredentials: true,
@@ -179,7 +174,7 @@ export function AuthProvider({ children }) {
 
   const updatePicture = useCallback(async (data) => {
     const response = await axios.patch(
-      "http://localhost:3333/api/v1/users/client/update-picture",
+      "/api/v1/users/client/update-picture",
       data
     );
     const user = response.data;
