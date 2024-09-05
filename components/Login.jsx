@@ -66,9 +66,15 @@ const Login = () => {
             <p className="font-semibold">We Talk</p>
           </div>
           {error && (
-            <span className="p-4 mb-2 text-lg font-semibold text-white bg-red-500 rounded-md">
-              {error?.response?.data?.message}
-            </span>
+            <p className="p-4 my-2 text-lg font-semibold text-white bg-red-500 rounded-md">
+              {error?.response
+                ? typeof error?.response?.data?.message === "string"
+                  ? error?.response?.data?.message
+                  : error?.response?.data?.message
+                      .map((message) => message)
+                      .join(",")
+                : "Something went wrong try later"}
+            </p>
           )}
 
           <RHFTextField name="email" placeholder="Email" />
