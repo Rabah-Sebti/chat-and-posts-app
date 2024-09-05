@@ -148,7 +148,9 @@ export default function ChatDrawer({ open, onClose, contact }) {
             <div
               ref={lastElementOnBottomRef}
               className={
-                rowData.sender !== user.id ? "flex space-x-1 items-center" : ""
+                rowData.senderId !== user.id
+                  ? "flex space-x-1 items-center"
+                  : ""
               }
             >
               {rowData.senderId !== user.id && (
@@ -294,6 +296,7 @@ export default function ChatDrawer({ open, onClose, contact }) {
       });
     }
   };
+  console.log("newwwwww", newMessages);
 
   return (
     <div>

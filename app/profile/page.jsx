@@ -5,6 +5,7 @@ import { deletePost, getPostsById } from "@redux/slices/post";
 import { useDispatch, useSelector } from "@redux/store";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -18,7 +19,14 @@ const ProfilePage = () => {
     const hasConfirmed = confirm("Are you sure you want to delete this post ?");
     if (hasConfirmed) {
       try {
-        dispatch(deletePost(post.id));
+        dispatch(deletePost(post.id)).then((status) => {
+          if (status === 200) {
+            toast("Post deleted", {
+              closeButton: true,
+              type: "success",
+            });
+          }
+        });
       } catch (error) {
         console.log("error delete", error);
       }

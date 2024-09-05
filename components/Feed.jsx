@@ -7,6 +7,7 @@ import { useDebounce } from "@hooks/use-debounce";
 import useSWR from "swr";
 import axiosInstance from "@utils/axios";
 import PostsSkeleton from "./skeletons/PostsSkeleton";
+import DataNotFound from "./empty-data/DataNotFound";
 
 const fetcher = (url, params) =>
   axiosInstance
@@ -21,9 +22,16 @@ const fetcher = (url, params) =>
       return res.data;
     });
 
-const PostsCardList = ({ data, handleClick, hasNextPage, fetchData }) => {
+const PostsCardList = ({
+  data,
+  handleClick,
+  hasNextPage,
+  fetchData,
+  isLoading,
+}) => {
+  const noData = data.length === 0 && !isLoading;
   return (
-    <div>
+    <div className="mt-2">
       <ResponsiveMasonry
         columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1300: 5 }}
         className=""
@@ -40,6 +48,8 @@ const PostsCardList = ({ data, handleClick, hasNextPage, fetchData }) => {
             ))}
         </Masonry>
       </ResponsiveMasonry>
+
+      {noData && <DataNotFound />}
     </div>
   );
 };
@@ -48,7 +58,6 @@ const Feed = () => {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
-  // const [newPosts, setNewPosts] = useState([]);
   const debouncedSearchTextFunction = useDebounce((value) => {
     setDebouncedSearchText(searchText);
   });
@@ -92,6 +101,7 @@ const Feed = () => {
         onChange={(e) => onChange(e)}
         className="p-2 rounded"
       />
+
       {isLoading && <PostsSkeleton />}
       {!isLoading && searchText ? (
         <PostsCardList
@@ -99,6 +109,7 @@ const Feed = () => {
           handleClick={handleClick}
           hasNextPage={hasNextPage}
           fetchData={fetchData}
+          isLoading={isLoading}
         />
       ) : (
         !isLoading && (
@@ -107,6 +118,7 @@ const Feed = () => {
             handleClick={handleClick}
             hasNextPage={hasNextPage}
             fetchData={fetchData}
+            isLoading={isLoading}
           />
         )
       )}

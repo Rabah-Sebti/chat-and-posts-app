@@ -2,8 +2,9 @@ import AuthGuard from "@auth/AuthGuard";
 import Nav from "@components/Nav";
 
 export const metadata = {
-  title: "We Talk",
-  description: "App foo chat and posts",
+  title: "Convo Stream",
+  description: "App for chat and share posts with friends",
+
   icons: {
     icon: "/logo3.png",
   },

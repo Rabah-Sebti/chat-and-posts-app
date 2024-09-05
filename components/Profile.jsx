@@ -9,11 +9,12 @@ import EditPassword from "./EditPassword";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useSelector } from "@redux/store";
 import PostsSkeleton from "./skeletons/PostsSkeleton";
+import DataNotFound from "./empty-data/DataNotFound";
 
 const Profile = ({ data, handleEdit, handleDelete, name }) => {
   const [activeStep, setActiveStep] = useState(0);
   const { isLoading } = useSelector((state) => state.post);
-
+  const noData = data.length === 0 && !isLoading;
   return (
     <section className="w-full px-16 2xl:px-20 ">
       <div className="mt-6 flex justify-between items-center">
@@ -55,6 +56,7 @@ const Profile = ({ data, handleEdit, handleDelete, name }) => {
               ))}
             </Masonry>
           </ResponsiveMasonry>
+          {noData && <DataNotFound />}
         </>
       )}
       {activeStep === 1 && <InfoPersonneles />}

@@ -17,12 +17,17 @@ const slice = createSlice({
     // START LOADING
     startLoading(state) {
       state.isLoading = true;
+      state.error = null;
     },
 
     // HAS ERROR
     hasError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    resetError(state, action) {
+      state.isLoading = false;
+      state.error = null;
     },
     editProfileSuccess(state, action) {
       state.isLoading = false;
@@ -41,7 +46,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const {} = slice.actions;
+export const { resetError } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +61,7 @@ export function editProfile(userInput) {
       });
 
       dispatch(slice.actions.editProfileSuccess(response.data));
+      return response.status;
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -72,7 +78,8 @@ export function editPassword(userInput) {
         }
       );
 
-      dispatch(slice.actions.editPasswordSuccess(response.data.user));
+      dispatch(slice.actions.editPasswordSuccess());
+      return response.status;
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

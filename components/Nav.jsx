@@ -93,8 +93,8 @@ const Nav = () => {
           height={48}
           className="object-contain"
         />
-        <p className="font-bold" style={{ fontSize: 14 }}>
-          We Talk
+        <p className="hidden md:flex font-bold" style={{ fontSize: 14 }}>
+          Convo Stream
         </p>
       </Link>
       <div className="sm:flex hidden">

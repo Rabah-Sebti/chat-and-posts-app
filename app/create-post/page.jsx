@@ -19,6 +19,7 @@ const CreatePost = () => {
     setSubmitting(true);
     try {
       dispatch(createPost(post)).then((status) => {
+        debugger;
         if (status === 201) {
           toast("Post created", {
             closeButton: true,
@@ -33,9 +34,6 @@ const CreatePost = () => {
       setSubmitting(false);
     }
   };
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch]);
   return (
     <Form
       type="Create"

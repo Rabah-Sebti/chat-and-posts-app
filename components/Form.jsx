@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { Home } from "lucide-react";
+import { Home, Undo } from "lucide-react";
 import { useDispatch } from "@redux/store";
 import { useRouter } from "next/navigation";
 import { createPost, updatePost } from "@redux/slices/post";
+import { toast } from "sonner";
 
 const Form = ({ type, postReconcile, postId, isEdit }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -22,12 +23,20 @@ const Form = ({ type, postReconcile, postId, isEdit }) => {
       if (isEdit) {
         dispatch(updatePost(post, postId)).then((status) => {
           if (status === 200) {
+            toast("Post updated", {
+              closeButton: true,
+              type: "success",
+            });
             router.push("/home");
           }
         });
       } else {
         dispatch(createPost(post)).then((status) => {
           if (status === 201) {
+            toast("Post created", {
+              closeButton: true,
+              type: "success",
+            });
             router.push("/home");
           }
         });
@@ -42,12 +51,21 @@ const Form = ({ type, postReconcile, postId, isEdit }) => {
   return (
     <section className="w-full max-w-full mb-5 px-16 2xl:px-20 ">
       <div className="mt-6">
-        <Link
-          href="/home"
-          className="h-[36px] w-[36px] rounded-full flex justify-center items-center bg-blue-600 hover:bg-blue-700 cursor-pointer"
-        >
-          <Home color="white" />
-        </Link>
+        {isEdit ? (
+          <Link
+            href="/profile"
+            className="h-[36px] w-[36px] rounded-full flex justify-center items-center bg-blue-600 hover:bg-blue-700 cursor-pointer"
+          >
+            <Undo color="white" />
+          </Link>
+        ) : (
+          <Link
+            href="/home"
+            className="h-[36px] w-[36px] rounded-full flex justify-center items-center bg-blue-600 hover:bg-blue-700 cursor-pointer"
+          >
+            <Home color="white" />
+          </Link>
+        )}
       </div>
       <div className="flex flex-col items-center">
         <h1

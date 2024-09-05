@@ -73,9 +73,10 @@ export function addMessage(data, setNewMessages, newMessages, socket) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post(`/api/v1/messages/add-message`, data);
+      debugger;
       const updatedMessages = [...newMessages, response.data];
       setNewMessages(updatedMessages);
-      dispatch(slice.actions.addMessageSuccess(response.data.msg));
+      dispatch(slice.actions.addMessageSuccess());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
