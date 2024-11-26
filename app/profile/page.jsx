@@ -21,7 +21,7 @@ const fetcher = (url, params) =>
       return res.data;
     });
 
-const pageSize = 3;
+const pageSize = 10;
 
 const ProfilePage = () => {
   const { user } = useAuthContext();

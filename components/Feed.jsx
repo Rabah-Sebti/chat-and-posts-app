@@ -26,7 +26,7 @@ const Feed = () => {
   const debouncedSearchTextFunction = useDebounce((value) => {
     setDebouncedSearchText(searchText);
   });
-  const pageSize = 3;
+  const pageSize = 10;
   const getKey = (pageIndex, previousPageData) => {
     // Stop fetching when the last page returns an empty array
     if (previousPageData && previousPageData.posts.length === 0) return null;
