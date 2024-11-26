@@ -6,6 +6,7 @@ import { useDispatch } from "@redux/store";
 import { useRouter } from "next/navigation";
 import { createPost, updatePost } from "@redux/slices/post";
 import { toast } from "sonner";
+import { Input } from "./ui/input";
 
 const Form = ({ type, postReconcile, postId, isEdit }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -93,19 +94,15 @@ const Form = ({ type, postReconcile, postId, isEdit }) => {
           </label>
           <label>
             <span className="font-semibold">Tag</span>
-            <input
+            <Input
               value={post.tag}
               onChange={(e) => setPost({ ...post, tag: e.target.value })}
-              className="w-full mt-3 p-2"
+              className="w-full mt-3 p-2 rounded-lg"
               placeholder="Write your tag"
               required
             />
           </label>
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded"
-            type="submit"
-            disabled={submitting}
-          >
+          <Button className="default_btn" type="submit" disabled={submitting}>
             {type}
           </Button>
         </form>

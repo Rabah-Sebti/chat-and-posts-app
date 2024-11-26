@@ -19,7 +19,6 @@ const CreatePost = () => {
     setSubmitting(true);
     try {
       dispatch(createPost(post)).then((status) => {
-        debugger;
         if (status === 201) {
           toast("Post created", {
             closeButton: true,

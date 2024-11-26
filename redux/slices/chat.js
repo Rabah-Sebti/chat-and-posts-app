@@ -44,9 +44,7 @@ const slice = createSlice({
     addMessageSuccess(state, action) {
       state.isLoading = false;
     },
-    createSocket(state, action) {
-      console.log(action.payload);
-    },
+    createSocket(state, action) {},
     getUnreadMessagesSuccess(state, action) {
       state.isLoading = false;
       state.UnreadMessages = action.payload.unread_messages;
@@ -73,7 +71,7 @@ export function addMessage(data, setNewMessages, newMessages, socket) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post(`/api/v1/messages/add-message`, data);
-      debugger;
+
       const updatedMessages = [...newMessages, response.data];
       setNewMessages(updatedMessages);
       dispatch(slice.actions.addMessageSuccess());

@@ -185,16 +185,16 @@
 }
 
 .black_btn {
-  @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm  flex items-center justify-center;
+  @apply rounded-xl border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm  flex items-center justify-center;
 }
 .emerald_btn {
-  @apply rounded-full border bg-emerald-500 hover:bg-emerald-600 py-1.5 px-5 text-white transition-all text-center text-sm  flex items-center justify-center;
+  @apply rounded-xl border bg-emerald-500 hover:bg-emerald-600 py-1.5 px-5 text-white transition-all text-center text-sm  flex items-center justify-center;
 }
 .default_btn {
-  @apply rounded-full border bg-blue-500 hover:bg-blue-600 py-1.5 px-5 text-white transition-all text-center text-sm  flex items-center justify-center;
+  @apply rounded-xl border bg-blue-500 hover:bg-blue-600 py-1.5 px-5 text-white transition-all text-center text-sm  flex items-center justify-center;
 }
 .outline_btn {
-  @apply rounded-full border border-black bg-transparent px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm  flex items-center justify-center;
+  @apply rounded-xl border border-black bg-transparent px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm  flex items-center justify-center;
 }
 
 .head_text {

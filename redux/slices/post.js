@@ -70,7 +70,10 @@ export function createPost(newCourse) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post("/api/v1/posts", newCourse);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts`,
+        newCourse
+      );
       dispatch(slice.actions.createPostSuccess(response.data));
       return response.status;
     } catch (error) {
@@ -82,7 +85,10 @@ export function updatePost(data, postId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.patch(`/api/v1/posts/${postId}`, data);
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts/${postId}`,
+        data
+      );
       dispatch(slice.actions.updatePostSuccess(response.data));
       return response.status;
     } catch (error) {
@@ -95,7 +101,9 @@ export function deletePost(postId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.delete(`/api/v1/posts/${postId}`);
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts/${postId}`
+      );
       dispatch(slice.actions.deletePostSuccess(postId));
       return response.status;
     } catch (error) {
@@ -108,7 +116,9 @@ export function getPosts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/v1/posts");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts`
+      );
       dispatch(slice.actions.getPostsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -119,7 +129,9 @@ export function getPostsById(userId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/posts/${userId}/user-posts`);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts/${userId}/user-posts`
+      );
       dispatch(slice.actions.getPostsByIdSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -130,7 +142,9 @@ export function getSinglePost(postId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/posts/${postId}`);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts/${postId}`
+      );
       dispatch(slice.actions.getSinglePostSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -141,7 +155,9 @@ export function addLikePost(postID, setLiked, setLikes, userId) {
   return async (dispatch) => {
     // dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`/api/v1/posts/${postID}/like`);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts/${postID}/like`
+      );
       const post = response.data.post;
       const hasLiked = post.likes.includes(userId);
       setLikes(response.data.likes);

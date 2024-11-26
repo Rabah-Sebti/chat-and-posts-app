@@ -296,7 +296,6 @@ export default function ChatDrawer({ open, onClose, contact }) {
       });
     }
   };
-  console.log("newwwwww", newMessages);
 
   return (
     <div>

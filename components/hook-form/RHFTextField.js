@@ -12,6 +12,7 @@ import {
 } from "../ui/form";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { cn } from "@lib/utils";
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ RHFTextField.propTypes = {
   label: PropTypes.string,
   helperText: PropTypes.node,
   isPassword: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default function RHFTextField({
@@ -27,6 +29,7 @@ export default function RHFTextField({
   label,
   helperText,
   isPassword = false,
+  className,
   ...other
 }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,19 +41,19 @@ export default function RHFTextField({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <FormItem>
+        <FormItem className="w-full">
           {label && (
             <FormLabel className="select-none text-fluid-lg ">
               {label}
             </FormLabel>
           )}
           <FormControl>
-            <div className="relative flex items-center">
+            <div className="w-full relative flex items-center">
               <Input
                 type={`${isPassword && !showPassword ? "password" : "text"}`}
                 {...field}
                 {...other}
-                className="rounded-xl h-[45px] 2xl:h-[50px]"
+                className={cn(`rounded-xl h-[45px] 2xl:h-[50px]`, className)}
               />
               {isPassword && (
                 <div

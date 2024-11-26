@@ -98,13 +98,13 @@ const Nav = () => {
         </p>
       </Link>
       <div className="sm:flex hidden">
-        <div className="flex items-center gap-3 md:gap-5">
+        <div className="flex items-center gap-2 md:gap-3">
           <Link href="/create-post" className="emerald_btn">
             Create post
           </Link>
           <div
             onClick={() => setOpenUsersChatDrawer(true)}
-            className="flex items-center justify-center bg-slate-200 hover:bg-slate-300 h-[36px] w-[36px] rounded-full cursor-pointer relative"
+            className="flex items-center justify-center bg-slate-200 hover:bg-slate-300 h-[36px] w-[36px] rounded-xl cursor-pointer relative"
           >
             {unreadMessages !== 0 && (
               <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center ">
@@ -115,7 +115,7 @@ const Nav = () => {
           </div>
           <div
             onClick={handleLogout}
-            className="flex items-center justify-center bg-slate-200 hover:bg-slate-300 h-[36px] w-[36px] rounded-full cursor-pointer"
+            className="flex items-center justify-center bg-slate-200 hover:bg-slate-300 h-[36px] w-[36px] rounded-xl cursor-pointer"
           >
             <LogOut className="text-blue-600" />
           </div>

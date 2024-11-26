@@ -6,15 +6,21 @@ import Link from "next/link";
 import ProfileSettingsDrawer from "./ProfileSettingsDrawer";
 import InfoPersonneles from "./InfoPersonneles";
 import EditPassword from "./EditPassword";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useSelector } from "@redux/store";
 import PostsSkeleton from "./skeletons/PostsSkeleton";
+import InfiniteScroll from "react-infinite-scroll-component";
 import DataNotFound from "./empty-data/DataNotFound";
 
-const Profile = ({ data, handleEdit, handleDelete, name }) => {
+const Profile = ({
+  data,
+  handleEdit,
+  handleDelete,
+  name,
+  fetchData,
+  hasNextPage,
+  isLoading = false,
+}) => {
   const [activeStep, setActiveStep] = useState(0);
-  const { isLoading } = useSelector((state) => state.post);
-  const noData = data.length === 0 && !isLoading;
+  const isNotFound = !isLoading && data.length === 0;
   return (
     <section className="w-full px-16 2xl:px-20 ">
       <div className="mt-6 flex justify-between items-center">
@@ -37,26 +43,27 @@ const Profile = ({ data, handleEdit, handleDelete, name }) => {
       {activeStep === 0 && (
         <>
           {isLoading && <PostsSkeleton />}
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1300: 5 }}
-            className=""
-          >
-            <Masonry
-              style={{
-                columnGap: "5px",
-              }}
-            >
-              {data.map((post, index) => (
-                <PostCard
-                  key={index}
-                  post={post}
-                  handleEdit={() => handleEdit && handleEdit(post)}
-                  handleDelete={() => handleDelete && handleDelete(post)}
-                />
-              ))}
-            </Masonry>
-          </ResponsiveMasonry>
-          {noData && <DataNotFound />}
+          {isNotFound && <DataNotFound />}
+          {!isNotFound && (
+            <div>
+              <InfiniteScroll
+                dataLength={data.length}
+                next={fetchData}
+                hasMore={hasNextPage}
+              >
+                <div className="columns-1 md:columns-2 lg:columns-3 gap-4 mt-2 py-4">
+                  {data.map((post, index) => (
+                    <PostCard
+                      key={index}
+                      post={post}
+                      handleEdit={() => handleEdit && handleEdit(post)}
+                      handleDelete={() => handleDelete && handleDelete(post)}
+                    />
+                  ))}
+                </div>
+              </InfiniteScroll>
+            </div>
+          )}
         </>
       )}
       {activeStep === 1 && <InfoPersonneles />}

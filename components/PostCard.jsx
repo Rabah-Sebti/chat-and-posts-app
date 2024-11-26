@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import Image from "next/image";
-import { Loader2, MoreVertical } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { useAuthContext } from "@auth/useAuthContext";
@@ -20,7 +20,11 @@ import { formatDateMessage } from "@utils/utils";
 import { useDispatch, useSelector } from "@redux/store";
 import { addLikePost } from "@redux/slices/post";
 import { Input } from "./ui/input";
-import { createComment, getComments } from "@redux/slices/comment";
+import {
+  createComment,
+  getComments,
+  getFirstComments,
+} from "@redux/slices/comment";
 
 const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
   const { user } = useAuthContext();
@@ -36,7 +40,8 @@ const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
   const [showComment, setShowComment] = useState(false);
   const pageSize = 3;
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalComments, setTotalComments] = useState(0);
+  const { _count } = post;
+  const [totalComments, setTotalComments] = useState(_count.comments);
   const hasNextPageComment = currentPage * pageSize < totalComments;
 
   const handleLike = () => {
@@ -50,27 +55,48 @@ const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
         content: comment,
         postId: post.id,
       };
-      dispatch(createComment(data, setComments));
+      dispatch(createComment(data, setComments, setTotalComments));
       setComment("");
     }
   };
 
   const fetchNextPage = () => {
     setCurrentPage((prev) => prev + 1);
-  };
-  useEffect(() => {
     const data = {
       postId: post.id,
-      page: currentPage,
+      page: currentPage + 1,
       pageSize: pageSize,
     };
 
     dispatch(getComments(data, setComments, setTotalComments));
-  }, [dispatch, currentPage, post.id]);
+  };
+  const handleOpenCloseComments = () => {
+    setShowComment(!showComment);
+    if (!showComment) {
+      const data = {
+        postId: post.id,
+        page: currentPage,
+        pageSize: pageSize,
+      };
+
+      dispatch(getFirstComments(data, setComments, setTotalComments));
+    } else {
+      setCurrentPage(1);
+    }
+  };
+  // useEffect(() => {
+  //   const data = {
+  //     postId: post.id,
+  //     page: currentPage,
+  //     pageSize: pageSize,
+  //   };
+
+  //   dispatch(getComments(data, setComments, setTotalComments));
+  // }, [dispatch, currentPage, post.id]);
 
   return (
     <Card
-      className="w-full relative h-min my-1 rounded-xl border card"
+      className="mb-4 break-inside-avoid w-full relative rounded-xl border-none card"
       style={{
         boxShadow: "2px 4px 8px 0 rgba(0, 0, 0, 5%)",
       }}
@@ -96,8 +122,8 @@ const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
       <CardContent>
         <p>{post.content}</p>
         <p
-          // onClick={() => handleClick && handleClick(post.tag)}
-          className="text-gray-400"
+          onClick={() => handleClick && handleClick(post.tag)}
+          className="text-gray-400 cursor-pointer"
         >
           {post.tag}
         </p>
@@ -119,8 +145,7 @@ const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
                 justifyContent: "center",
               }}
             >
-              {/* <Icon name="MoreVertical" size={16} /> */}
-              <MoreVertical size={16} />
+              <Icon name="EllipsisVertical" size={16} />
             </div>
           </PopoverTrigger>
           <PopoverContent className="w-32 p-1 bg-white rounded">
@@ -170,7 +195,7 @@ const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
             <span className="text-gray-700 text-[12px]">Like</span>
           </div>
           <div
-            onClick={() => setShowComment(!showComment)}
+            onClick={handleOpenCloseComments}
             className="p-1 rounded flex items-center space-x-1 ml-2 cursor-pointer hover:bg-slate-200"
           >
             <div>
@@ -235,14 +260,22 @@ const PostCard = ({ post, handleClick, handleEdit, handleDelete }) => {
                           className="rounded-full object-contain"
                         />
                       </div>
-                      <div className="glassmorphism py-1 px-5 w-full">
+                      <div className="glassmorphism py-1 px-5 w-[80%]">
                         <div className="flex flex-row space-x-1">
                           <p className="font-bold">
                             {comment?.author?.firstname}
                           </p>
                           <p className="text-gray-500">{dateCreate}</p>
                         </div>
-                        <p>{comment.content}</p>
+                        <p
+                          style={{
+                            overflowWrap: "break-word",
+                            maxWidth: "100%",
+                          }}
+                          className=""
+                        >
+                          {comment.content}
+                        </p>
                       </div>
                     </div>
                   </div>

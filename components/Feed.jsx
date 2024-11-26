@@ -1,13 +1,11 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import PostCard from "./PostCard";
+import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { useDebounce } from "@hooks/use-debounce";
-import useSWR from "swr";
 import axiosInstance from "@utils/axios";
 import PostsSkeleton from "./skeletons/PostsSkeleton";
-import DataNotFound from "./empty-data/DataNotFound";
+import useSWRInfinite from "swr/infinite";
+import PostsList from "./PostsList";
 
 const fetcher = (url, params) =>
   axiosInstance
@@ -22,74 +20,55 @@ const fetcher = (url, params) =>
       return res.data;
     });
 
-const PostsCardList = ({
-  data,
-  handleClick,
-  hasNextPage,
-  fetchData,
-  isLoading,
-}) => {
-  const noData = data.length === 0 && !isLoading;
-  return (
-    <div className="mt-2">
-      <ResponsiveMasonry
-        columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1300: 5 }}
-        className=""
-      >
-        <Masonry
-          className=""
-          style={{
-            columnGap: "5px",
-          }}
-        >
-          {data?.length > 0 &&
-            data.map((post, index) => (
-              <PostCard key={index} post={post} handleClick={handleClick} />
-            ))}
-        </Masonry>
-      </ResponsiveMasonry>
-
-      {noData && <DataNotFound />}
-    </div>
-  );
-};
-
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
-  const [page, setPage] = useState(1);
   const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
   const debouncedSearchTextFunction = useDebounce((value) => {
     setDebouncedSearchText(searchText);
   });
-
-  // const page = 1;
   const pageSize = 3;
+  const getKey = (pageIndex, previousPageData) => {
+    // Stop fetching when the last page returns an empty array
+    if (previousPageData && previousPageData.posts.length === 0) return null;
 
-  const { data, error, isLoading } = useSWR(
-    [
+    return [
       `${process.env.NEXT_PUBLIC_REACT_APP_HOST_API_KEY}/api/v1/posts`,
       {
-        search: debouncedSearchText,
-        page,
+        search: debouncedSearchText, // You can also pass dynamic filters
+        page: pageIndex, // Start pages from 1
         pageSize,
       },
-      // setNewPosts,
-    ],
-    ([url, params]) => fetcher(url, params)
+    ];
+  };
+
+  const { data, error, size, setSize, isLoading } = useSWRInfinite(
+    getKey,
+    ([url, params]) => fetcher(url, params),
+    {
+      revalidateOnFocus: false, // Prevent re-fetching when the window refocuses
+    }
   );
 
-  const totalRecords = data?.totalPosts;
-
-  const hasNextPage = page < Math.ceil(totalRecords / pageSize);
-  const fetchData = () => {
-    setPage((prev) => prev + 1);
-  };
   const handleClick = (tagId) => {};
   const onChange = (e) => {
     e.preventDefault();
     const value = e.target.value;
     setSearchText(value);
     debouncedSearchTextFunction(value);
+  };
+
+  const posts = data ? data.flatMap((page) => page.posts) : []; // Flatten paginated responses
+
+  const isLoadingMore =
+    size > 0 && data && typeof data[size - 1] === "undefined";
+  const isEmpty = data?.[0]?.posts?.length === 0;
+  const isReachingEnd =
+    isEmpty || (data && data[data.length - 1]?.posts?.length < pageSize);
+
+  const next = () => {
+    if (!isReachingEnd && !isLoadingMore) {
+      setSize(size + 1); // Load next page
+    }
   };
 
   return (
@@ -99,26 +78,23 @@ const Feed = () => {
         placeholder="Search"
         value={searchText}
         onChange={(e) => onChange(e)}
-        className="p-2 rounded"
+        className="p-2 rounded-xl"
       />
-
       {isLoading && <PostsSkeleton />}
       {!isLoading && searchText ? (
-        <PostsCardList
-          data={data?.posts || []}
+        <PostsList
+          data={posts || []}
           handleClick={handleClick}
-          hasNextPage={hasNextPage}
-          fetchData={fetchData}
-          isLoading={isLoading}
+          hasNextPage={!isReachingEnd && !isLoadingMore}
+          fetchData={next}
         />
       ) : (
         !isLoading && (
-          <PostsCardList
-            data={data?.posts || []}
+          <PostsList
+            data={posts || []}
             handleClick={handleClick}
-            hasNextPage={hasNextPage}
-            fetchData={fetchData}
-            isLoading={isLoading}
+            hasNextPage={!isReachingEnd && !isLoadingMore}
+            fetchData={next}
           />
         )
       )}

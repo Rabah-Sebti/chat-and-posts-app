@@ -63,7 +63,7 @@ const Login = () => {
         >
           <div className="py-2 flex justify-between items-center">
             <Image src="/logo3.png" alt="logo" width={36} height={36} />
-            <p className="font-semibold">We Talk</p>
+            <p className="font-semibold">Convo Stream</p>
           </div>
           {error && (
             <p className="p-4 my-2 text-lg font-semibold text-white bg-red-500 rounded-md">
